@@ -6,7 +6,7 @@ function crearServidor(puerto, db) {
 
         app.use(express.json())
 
-        app.get('/api/remiseria', async (req, res) => {
+        app.get('/api/remiseria/autos', async (req, res) => {
            
             let autos
 
@@ -18,6 +18,33 @@ function crearServidor(puerto, db) {
             res.json(autos)
         })
 
+        app.get('/api/remiseria/choferes', async (req, res) => {
+            let choferes
+
+            if(req.query.dni){
+                choferes = await db.getChoferByDni(req.query.patente)
+            }else{
+                choferes = await db.getAllChoferes()
+            }
+            res.json(choferes)
+        })
+
+        app.post('/api/remiseria/autos', async (req, res) => {
+            const auto = req.body
+            
+            try {
+                if (auto.patente){
+                    await db.addAuto(auto)
+                    res.json(auto)
+                } else {
+                    const err = new Error('El auto no tiene patente')
+                    res.status(400).json({ message: err.message })
+                }
+            } catch (error) {
+                res.status(400).json({ message: error.message })
+            }
+                
+        })
        /*  app.post('/api/estudiantes', async (req, res) => {
             const estuCreado = req.body
             estuCreado.id = nextId++

@@ -11,11 +11,24 @@ function crearCliente( urlServidor, puerto, rutaApi ) {
             const respuesta = await axios.get(`${urlServidor}:${puerto}${rutaApi}?patente=${patente}`)
             return respuesta.data
         },
-        getChoferByDni: async () => {
+        getAllChoferes: async() => {
+            const respuesta = await axios.get(`${urlServidor}:${puerto}${rutaApi}`)
+            return respuesta.data
+        },
+        getChoferByDni: async (dni) => {
+            const respuesta = await axios.get(`${urlServidor}:${puerto}${rutaApi}?dni=${dni}`)
+            return respuesta.data
 
         },
-        addNewAuto: async () => {
-
+        addNewAuto: async (datos) => {
+            try {
+                const respuesta = await axios.post(`${urlServidor}:${puerto}${rutaApi}`, datos)
+                return [respuesta.data]
+            } catch (err) {
+                const error = new Error(err.response.data.message)
+                error.status = err.response.status
+                throw error
+            }
         },
         addNewChofer: async () => {
 

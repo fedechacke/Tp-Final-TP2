@@ -41,6 +41,17 @@ function crearCliente( urlServidor, puerto, rutaApi ) {
         },
         addAutoStats: async (statsFile) => {
 
+        },
+        addNewFile: async (file) => {
+            try {
+                const respuesta = await axios.post(`${urlServidor}:${puerto}${rutaApi}`, file)
+                return [respuesta.data]
+            } catch (err) {
+                // const error = new Error(err.response.data.message)
+                // error.status = err.response.status
+                // throw error
+                console.log(err.message)
+            }
         }
     }
 }

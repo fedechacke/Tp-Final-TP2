@@ -17,8 +17,10 @@
     "express": "^4.17.1",
     "jquery": "^3.5.1",
     "mocha": "^8.1.3",
+    "node-schedule": "^1.3.2",
     "nodemailer": "^6.4.14",
     "nodemon": "^2.0.4",
-    "pdfmake": "^0.1.68"
+    "pdfmake": "^0.1.68",
+    "shelljs": "^0.8.4"
   }
 }

@@ -1,4 +1,5 @@
 const assert = require('assert')
+const fs = require('fs')
 
 const { crearServidor } = require('../src/Server.js')
 const { crearCliente } = require('../src/ClienteRest.js')
@@ -155,7 +156,7 @@ describe('server/choferes', () => {
     beforeEach(async () => {
         db = crearDao('memoria')
         server = await crearServidor(0, db)
-        cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/choferes')
+        cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/upload')
     })
 
     afterEach(() => {
@@ -178,6 +179,14 @@ describe('server/choferes', () => {
                 const esperado = [chofer1, chofer2]
                 const choferes = await cliente.getAllChoferes()
                 assert.deepStrictEqual(choferes, esperado)
+            })
+        })
+    })
+    describe.only('post-pdf', () => {
+        describe('te subo el pdf Demo', () => {
+            it('sube magicamente el pdf al server', async () => {
+                const pdf = fs.readFileSync('./Demo.pdf');
+                cliente.addNewFile(pdf)
             })
         })
     })

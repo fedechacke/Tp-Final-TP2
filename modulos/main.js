@@ -13,7 +13,15 @@ const { crearTemporizadorDeEventos } = require('./ScheduleModulo')
 // pdf.crearDoc('Mi-primer-pdf', 'Yo, obvio', 'El mejor asunto que se te pueda ocurrir, papu', 'Este es mi primer archivo PDF, por lo que estoy demasiado emocionado. Si esto llega a funcionar bien nos vamos de joda!');
 // pdf.guardarDoc('Demo', '.');
 
-const temporizador = crearTemporizadorDeEventos();
-temporizador.repetirDiariamente(18,32,0, function() {
+// const temporizador = crearTemporizadorDeEventos();
+/* temporizador.repetirDiariamente(18,49,0, function() {
     console.log('se esta repitiendo Tomas')
-})
+}) */
+
+/* temporizador.repetirMensualmente(24, 18, 53, 0, function() {
+    console.log('se esta repitiendo Tomas')
+}) */
+
+/* temporizador.repetirSemanalmente(6,18,56,0,function() {
+    console.log('se esta repitiendo Tomas')
+}) */

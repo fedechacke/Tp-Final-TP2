@@ -25,21 +25,42 @@ function crearModuloMailing(mailService, username, password) {
         *@param {string} to: the recipients of your mail
         *@param {string} subject: subject of your mail
         *@param {string} mailBody: body/content
+        *@param {string} fileName: name of the file
+        *@param {string} filePath: path to the atttached document
         */ 
-        enviarMail: async function (to, subject, mailBody) {
+        enviarMail: async function (to, subject, mailBody, fileName, filePath) {
            
            const mailData = {
                from: this.username,
                to: to,
                subject: subject,
-               text: mailBody
+               text: mailBody,
+               dsn: {
+                id: 'Mensajes Rechazados',
+                return: 'headers',
+                notify: ['failure', 'delay'],
+                recipient: this.username
+               },
+               attachments: [{
+                   filename: fileName,
+                   path: filePath,
+                   contentType: "application/pdf"
+               }]
             } 
             
             await transporter.sendMail(mailData, (err, info) => {
                 if (err){
                     console.log(`Error: ${err.message}`);
                 } else {
-                    console.log(`Mail enviado con exito a: ${info.accepted}`)
+                    if (info.accepted){
+                        console.log(`Mail enviado con exito a: ${info.accepted}`)
+                    }
+                    /*if (info.rejected){
+                        console.log(`Mail rechazados: ${info.rejected}`)
+                    }
+                    if (info.pending){
+                        console.log(`Mail pendientes: ${info.pending}`)
+                    }*/
                 }
             })
         }

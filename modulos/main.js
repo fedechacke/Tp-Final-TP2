@@ -1,12 +1,12 @@
-const { crearModuloMailing } = require('./MailingModulo.js')
-const { crearModuloPdf } = require('./PdfGeneratorModule');
-const { crearTemporizadorDeEventos } = require('./ScheduleModulo')
+//const { crearModuloMailing } = require('./MailingModulo.js')
+//const { crearModuloPdf } = require('./PdfGeneratorModule');
+//const { crearTemporizadorDeEventos } = require('./ScheduleModulo')
 
-// const modulo = crearModuloMailing('gmail', 'gestion.remiseria@gmail.com', 'TPgrupal2-');
+//const modulo = crearModuloMailing('gmail', 'gestion.remiseria@gmail.com', 'TPgrupal2-');
 
-// const addreses = ['tomas.lozano92@gmail.com', 'sabrina-martinez@hotmail.es'];
+//const addreses = ['tomas.lozano92@gmail.com', 'sabrina-martinez@hotmail.es'];
 
-// modulo.enviarMail(addreses,'Test de prueba','Body del mail');
+//modulo.enviarMail(addreses,'Test de prueba','Body del mail');
 
 // const pdf = crearModuloPdf();
 // pdf.crearTemplate('Helvetica', 35, false, 'A4', 'portrait');

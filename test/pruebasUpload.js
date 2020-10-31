@@ -1,9 +1,13 @@
-/*         const form = new FormData();
+        const FormData = require('form-data');
+
+
+        let form = new FormData();
+
         const stream = fs.createReadStream('Demo.pdf');
         
         form.append('image', stream);
         
-        // In Node.js environment you need to set boundary in the header field 'Content-Type' by calling method `getHeaders`
+
         const formHeaders = form.getHeaders();
         cliente.addNewFile(form, {
         headers: {
@@ -11,15 +15,10 @@
         },
         })
         .then(response => response)
-        .catch(error => error) */
+        .catch(error => error) 
 
-
-               /*  const FormData = require('form-data');
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
         const http = require('http');
-        
-        let form = new FormData();
-
-
         
         http.request('http://nodejs.org/images/logo.png', function(response) {
             form.append('file', fs.createReadStream('Demo.pdf'));
@@ -29,8 +28,8 @@
             // res – response object (http.IncomingMessage)  //
             res.resume();
         });
- */
-        /* let formData = {
+
+       let formData = {
             name: 'file1',
             file: {
                 value:  fs.createReadStream('Demo.pdf'),
@@ -51,4 +50,4 @@
         }
         ); 
 
-/*         cliente.addNewFile(formData) */ 
+        cliente.addNewFile(formData) 

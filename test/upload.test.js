@@ -12,35 +12,24 @@ async function main(){
 
     function uploadFile() {
 
-        var bodyFormData = new FormData();
-        const stream = fs.readFileSync('Demo.pdf');
-        bodyFormData.append('Archivo', stream);
+        var nachito = new FormData();
+        const stream = fs.createReadStream('post.png');
+        nachito.append('Archivo', stream);
 
         axios({
             method: 'post',
             url: `http://localhost:${server.address().port}/remiseria/upload`,
-            data: bodyFormData,
+            data: nachito,
             headers: {'Content-Type': 'multipart/form-data' }
             })
             .then(function (response) {
-                //handle success
 
-                console.log(response);
+                console.log(response.data)
             })
+            
             .catch(function (response) {
-                //handle error
-                console.log(response);
+
             });
-
-/*         let body = [];
-        request.on('data', (chunk) => {
-            body.push(chunk);
-            }).on('end', () => {
-            body = Buffer.concat(body).toString();
-            // at this point, `body` has the entire request body stored in it as a string
-        }); */
-        
-
     }
     uploadFile()
 }

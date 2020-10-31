@@ -2,22 +2,33 @@ const express = require('express')
 const fs = require('fs')
 const { crearModuloPdf } = require('../modulos/PdfGeneratorModule/PdfGeneratorModule.js');
 const request = require('request');
+const fileUpload = require('express-fileupload');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const _ = require('lodash');
 
 
 async function main () {
     await crearServidor(4200);
-
 }
 
-
 main()
-
 
 function crearServidor(puerto, db) {
     return new Promise((resolve, reject) => {
         const app = express()
 
         app.use(express.json())
+        app.use(fileUpload({
+            createParentPath: true
+        }));
+        //add other middleware
+        app.use(cors());
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({extended: true}));
+        app.use(morgan('dev'));
+
 
         app.get('/api/remiseria/autos', async (req, res) => {
            
@@ -51,15 +62,41 @@ function crearServidor(puerto, db) {
         })
 
          app.post('/remiseria/upload', async (req, res) => {
-            const file = req.params
-            console.log('ALGO 1')
-            console.log('REQ. params: ' , req.form)
+            console.log('REQ. : ', req)
+            try {
+                if(!req.files) {
+                    res.send({
+                        status: false,
+                        message: 'No file uploaded'
+                    });
+                } else {
+                    //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
+                    let nachito = req.files.nachito;
+                    
+                    //Use the mv() method to place the file in upload directory (i.e. "uploads")
+                    nachito.mv('./uploads/' + nachito.name);
+        
+                    //send response
+                    res.send( {
+                        status: true,
+                        message: 'File is uploaded',
+                        data: {
+                            name: nachito.name,
+                            mimetype: nachito.mimetype,
+                            size: nachito.size
+                        }
+                        });
+                        }
+                    } catch (err) {
+                        res.status(500).send(err);
+                    }
+                });
+
+/*             const file = req
             try {
                 if (file) {
-
                     fs.writeFileSync('./files/nachito.pdf', file)
-                    res.json(file)
-                    console.log('ALGO 2')
+                    console.log('Archivo subido con éxito')
                 } else {
                     const err = new Error('no hay nada en el archivo')
                     res.status(400).json({message: err.message})
@@ -68,7 +105,7 @@ function crearServidor(puerto, db) {
                 res.status(400).json({message: error.message})
             }
 
-        }) 
+        })  */
 
  /*        let formData = {
             name: 'file1',
@@ -89,13 +126,6 @@ function crearServidor(puerto, db) {
             console.log('Upload successful!  Server responded with:', body);
         }
         ); */
-
-
-
-
-
-
-
 
 
 

@@ -1,6 +1,17 @@
 const express = require('express')
 const fs = require('fs')
-const { crearModuloPdf } = require('../modulos/PdfGeneratorModule');
+const { crearModuloPdf } = require('../modulos/PdfGeneratorModule/PdfGeneratorModule.js');
+const request = require('request');
+
+
+async function main () {
+    await crearServidor(4200);
+
+}
+
+
+main()
+
 
 function crearServidor(puerto, db) {
     return new Promise((resolve, reject) => {
@@ -31,7 +42,7 @@ function crearServidor(puerto, db) {
             res.json(choferes)
         })
 
-        app.get('/remiseria/dowload/:id', async (req, res) => {
+        app.get('/remiseria/download/:id', async (req, res) => {
             if (req.params.id > 0){
                 const data =fs.readFileSync(`./Demo.pdf`);
                 res.contentType("application/pdf");
@@ -39,16 +50,16 @@ function crearServidor(puerto, db) {
             }
         })
 
-        app.post('/remiseria/upload', async (req, res) => {
+         app.post('/remiseria/upload', async (req, res) => {
             const file = req.params
-            const pdfMaker = crearModuloPdf();
-            
+            console.log('ALGO 1')
+            console.log('REQ. params: ' , req.form)
             try {
                 if (file) {
-                    pdfMaker.crearTemplate('Helvetica', 35, false, 'A4', 'portrait');
-                    pdfMaker.crearDoc('archivo que viene subido al server', 'quien me lo mande', 'si te pica, rascate', file)
-                    pdfMaker.guardarDoc('archivoSubido', './')
+
+                    fs.writeFileSync('./files/nachito.pdf', file)
                     res.json(file)
+                    console.log('ALGO 2')
                 } else {
                     const err = new Error('no hay nada en el archivo')
                     res.status(400).json({message: err.message})
@@ -57,7 +68,36 @@ function crearServidor(puerto, db) {
                 res.status(400).json({message: error.message})
             }
 
-        })
+        }) 
+
+ /*        let formData = {
+            name: 'file1',
+            file: {
+              value:  fs.createReadStream('Demo.pdf'),
+              options: {
+                filename: 'Demo.pdf',
+                contentType: 'application/pdf'
+              }
+            }
+          };
+          
+        request.post({url:'http://localhost/remiseria/upload', formData: formData}, 
+        function cb(err, httpResponse, body) {
+            if (err) {
+            return console.error('upload failed:', err);
+            }
+            console.log('Upload successful!  Server responded with:', body);
+        }
+        ); */
+
+
+
+
+
+
+
+
+
 
         app.post('/api/remiseria/autos', async (req, res) => {
             const auto = req.body

@@ -50,7 +50,7 @@ function crearCliente( urlServidor, puerto, rutaApi ) {
                 // const error = new Error(err.response.data.message)
                 // error.status = err.response.status
                 // throw error
-                console.log(err.message)
+                console.log(err.message, 'HOLA')
             }
         }
     }

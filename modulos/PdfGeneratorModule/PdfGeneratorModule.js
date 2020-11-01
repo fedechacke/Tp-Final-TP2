@@ -55,6 +55,15 @@ function crearModuloPdf() {
           // ...
         };
 
+        function imprimirPDF(archivo) {
+            return printer.createPdfKitDocument(archivo);
+        };
+
+        function saveDoc(path, fileName, pdfDoc) {
+            await pdfDoc.pipe(fs.createWriteStream(`${path}/${fileName}.pdf`)),
+            pdfDoc.end()
+        }
+
     return {
         /** 
         *@param {string} font: the font used on the document, can be Courier, Helvetica, Times, Symbol or ZapfDingbats
@@ -69,31 +78,40 @@ function crearModuloPdf() {
         *@param {string} pageOrientation: The orientation of the page. Can be landscape or portrait
         */ 
         crearTemplate: function(font, fontSize, isBold, pageSize, pageOrientation) {
-            docDefinition.pageOrientation = pageOrientation;
-            docDefinition.pageSize = pageSize;
-            docDefinition.defaultStyle.font = font;
-            docDefinition.defaultStyle.fontSize = fontSize;
-            docDefinition.defaultStyle.bold = isBold;
-            docDefinition.info.creator = 'Mi módulo de PDF';
-            docDefinition.info.producer = 'También mi módulo de PDF';
+            const template = docDefinition;
+
+            template.pageOrientation = pageOrientation;
+            template.pageSize = pageSize;
+            template.defaultStyle.font = font;
+            template.defaultStyle.fontSize = fontSize;
+            template.defaultStyle.bold = isBold;
+            template.info.creator = 'Mi módulo de PDF';
+            template.info.producer = 'También mi módulo de PDF';
+
+            return template;
+        },
+
+        crearContent: function (template) {
+            const content;
+            
+            return content;
         },
 
         /** 
         *@param {string} title: the title of the document
         *@param {string} author: The author of the document
         *@param {string} subject: The subject of the document
-        *@param {string} content: The content of the file
+        *@param {string} content: The content of the file, you must create this whith crearContent()
         */ 
         crearDoc: function (title, author, subject, content){
-            docDefinition.info.title = title;
-            docDefinition.info.author = author;
-            docDefinition.info.subject = subject;
-            docDefinition.content = content;
-            pdfDoc = printer.createPdfKitDocument(docDefinition, /* options */);
+            
+            content.info.title = title;
+            content.info.author = author;
+            content.info.subject = subject;
+            pdfDoc = imprimirPDF(docDefinition);
         }, 
-        guardarDoc: async function(fileName, path){
-            await pdfDoc.pipe(fs.createWriteStream(`${path}/${fileName}.pdf`)),
-            pdfDoc.end()
+        guardarDoc: async function(fileName, path, doc){
+            saveDoc(path, fileName, doc);
         } 
     }
 }

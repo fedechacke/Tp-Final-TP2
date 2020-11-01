@@ -11,25 +11,26 @@ async function main(){
     const cliente = crearCliente('http://localhost', server.address().port, '/remiseria/upload')
 
     function uploadFile() {
-
-        var nachito = new FormData();
+        
+        const form = new FormData();
         const stream = fs.createReadStream('post.png');
-        nachito.append('Archivo', stream);
 
-        axios({
-            method: 'post',
-            url: `http://localhost:${server.address().port}/remiseria/upload`,
-            data: nachito,
-            headers: {'Content-Type': 'multipart/form-data' }
-            })
-            .then(function (response) {
 
-                console.log(response.data)
-            })
-            
-            .catch(function (response) {
+        form.append('image', stream);
+        form.name = 'nachito'
+        const formHeaders = form.getHeaders();
+        
 
-            });
+        axios.post(`http://localhost:${server.address().port}/remiseria/upload`, form, {
+        headers: {
+            ...formHeaders,
+        },
+        name: 'nachito',
+        tempFilePath: './uploads'
+        })
+        .then(response => response)
+        .catch(error => error)
+
     }
     uploadFile()
 }

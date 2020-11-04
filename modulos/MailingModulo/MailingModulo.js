@@ -44,8 +44,8 @@ function crearModuloMailing(mailService, username, password) {
         *@param {string} to: the recipients of your mail
         *@param {string} subject: subject of your mail
         *@param {string} mailBody: body/content
-        *@param {string} fileName: name of the file
-        *@param {string} filePath: path to the atttached document
+        *@param {string?} fileName: name of the file
+        *@param {string?} filePath: path to the atttached document
         */ 
         enviarMail: async function (to, subject, mailBody, fileName, filePath) {
             
@@ -56,13 +56,13 @@ function crearModuloMailing(mailService, username, password) {
                     console.log(`Error: ${err.message}`);
                 } else {
                     if (info.accepted){
-                        console.log(`Mail enviado con exito a: ${info.accepted}`)
+                        //console.log(`Mail enviado con exito a: ${info.accepted}`)
                     }
                     if (info.rejected){
-                        console.log(`Mail rechazados: ${info.rejected}`)
+                        //console.log(`Mail rechazados: ${info.rejected}`)
                     }
                     if (info.pending){
-                        console.log(`Mail pendientes: ${info.pending}`)
+                        //console.log(`Mail pendientes: ${info.pending}`)
                     }
                 }
             })

@@ -19,6 +19,25 @@ function crearModuloMailing(mailService, username, password) {
     } else {
         throw new Error('Usuario invalido');
     }
+
+    createMailData = function (to, subject, mailBody, fileName, filePath) {
+        let mailData = {
+            from: this.username,
+            to: to,
+            subject: subject,
+            text: mailBody
+        }
+
+        if (filePath != undefined && fileName != undefined){
+            let ext = filePath.substr(filePath.lastIndexOf('.') + 1);
+            mailData.attachments = [{
+                filename: fileName,
+                path: filePath,
+                contentType: "application/"+ext
+            }]
+        }
+        return mailData; 
+    }
     
     return {
         /** 
@@ -29,24 +48,8 @@ function crearModuloMailing(mailService, username, password) {
         *@param {string} filePath: path to the atttached document
         */ 
         enviarMail: async function (to, subject, mailBody, fileName, filePath) {
-           
-           const mailData = {
-               from: this.username,
-               to: to,
-               subject: subject,
-               text: mailBody,
-               dsn: {
-                id: 'Mensajes Rechazados',
-                return: 'headers',
-                notify: ['failure', 'delay'],
-                recipient: this.username
-               },
-               attachments: [{
-                   filename: fileName,
-                   path: filePath,
-                   contentType: "application/pdf"
-               }]
-            } 
+            
+            const mailData = createMailData(to, subject, mailBody, fileName, filePath);
             
             await transporter.sendMail(mailData, (err, info) => {
                 if (err){
@@ -55,12 +58,12 @@ function crearModuloMailing(mailService, username, password) {
                     if (info.accepted){
                         console.log(`Mail enviado con exito a: ${info.accepted}`)
                     }
-                    /*if (info.rejected){
+                    if (info.rejected){
                         console.log(`Mail rechazados: ${info.rejected}`)
                     }
                     if (info.pending){
                         console.log(`Mail pendientes: ${info.pending}`)
-                    }*/
+                    }
                 }
             })
         }

@@ -4,4 +4,4 @@ const modulo = crearModuloMailing('gmail', 'gestion.remiseria@gmail.com', 'TPgru
 
 const addreses = ['asdasd@asdasd.com', 'sabrina-martinez@hotmail.es'];
 
-modulo.enviarMail(addreses,'Test de prueba','Body del mail','Un adjunto','Demo.pdf');
+modulo.enviarMail(addreses,'Test de prueba','Body del mail', 'UnAdjunto', 'Demo.pdf');

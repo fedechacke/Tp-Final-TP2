@@ -7,6 +7,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const _ = require('lodash');
+const multer = require('multer');
+const { mv } = require('shelljs');
+const router = express.Router();
 
 
 async function main () {
@@ -61,71 +64,38 @@ function crearServidor(puerto, db) {
             }
         })
 
-         app.post('/remiseria/upload', async (req, res) => {
-            console.log('REQ. : ', req)
+        /////////////////////////////////////////////////////////////////////////////
+
+
+        let storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                cb(null, './uploads')
+
+            },
+            filename: (req,file, cb) => {
+                cb(null, file.originalname)
+            }
+        })
+        let upload = multer({dest: './uploads/'});
+
+        app.post('/remiseria/upload', upload.single('nachito'), async (req, res) => {
             try {
-                if(!req.files) {
-                    res.send({
-                        status: false,
-                        message: 'No file uploaded'
-                    });
-                } else {
-                    //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
-                    let nachito = req.files.nachito;
-                    
-                    //Use the mv() method to place the file in upload directory (i.e. "uploads")
-                    nachito.mv('./uploads/' + nachito.name);
-        
-                    //send response
-                    res.send( {
-                        status: true,
-                        message: 'File is uploaded',
-                        data: {
-                            name: nachito.name,
-                            mimetype: nachito.mimetype,
-                            size: nachito.size
-                        }
-                        });
-                        }
-                    } catch (err) {
-                        res.status(500).send(err);
+                let archivo = req.files.image
+                archivo.mv('./uploads', err => {
+                    if(err){
+                       throw err.message
                     }
-                });
-
-/*             const file = req
-            try {
-                if (file) {
-                    fs.writeFileSync('./files/nachito.pdf', file)
-                    console.log('Archivo subido con éxito')
-                } else {
-                    const err = new Error('no hay nada en el archivo')
-                    res.status(400).json({message: err.message})
-                }
+                })
+                res.send(req.files);
+                console.log('HIZO EL UPLOAD')
             } catch (error) {
-                res.status(400).json({message: error.message})
+                throw error.message
             }
 
-        })  */
+            });
 
- /*        let formData = {
-            name: 'file1',
-            file: {
-              value:  fs.createReadStream('Demo.pdf'),
-              options: {
-                filename: 'Demo.pdf',
-                contentType: 'application/pdf'
-              }
-            }
-          };
-          
-        request.post({url:'http://localhost/remiseria/upload', formData: formData}, 
-        function cb(err, httpResponse, body) {
-            if (err) {
-            return console.error('upload failed:', err);
-            }
-            console.log('Upload successful!  Server responded with:', body);
-        }
-        ); */
+                
+
 
 
 
@@ -160,7 +130,7 @@ function crearServidor(puerto, db) {
         const server = app.listen(puerto)
             .on('listening', () => resolve(server))
             .on('error', () => reject(new Error('address in use')))
-    })
+        });
 }
 
 module.exports = { crearServidor }

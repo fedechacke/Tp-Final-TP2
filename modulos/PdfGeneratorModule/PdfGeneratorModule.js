@@ -28,8 +28,8 @@ fonts = {
 const PdfPrinter = require('pdfmake');
 const printer = new PdfPrinter(fonts);
 const fs = require('fs');
-  
-  
+
+
 function crearModuloPdf() {
     let pdfDoc;
 
@@ -49,7 +49,7 @@ function crearModuloPdf() {
         },
         pageSize:'',
         pageOrientation: ''
-      };
+    };
 
     const options = {
           // ...
@@ -59,9 +59,36 @@ function crearModuloPdf() {
             return printer.createPdfKitDocument(archivo);
         };
 
-        function saveDoc(path, fileName, pdfDoc) {
+        async function saveDoc(path, fileName, pdfDoc) {
             await pdfDoc.pipe(fs.createWriteStream(`${path}/${fileName}.pdf`)),
             pdfDoc.end()
+        }
+
+        function buildTableBody(data, columns) {
+            const body = [];
+        
+            body.push(columns);
+        
+            data.forEach( row => {
+                const dataRow = [];
+        
+                columns.forEach(function(column) {
+                    dataRow.push(row[column].toString());
+                })
+        
+                body.push(dataRow);
+            });
+        
+            return body;
+        }
+        
+        function table(data, columns) {
+            return {
+                table: {
+                    headerRows: 1,
+                    body: buildTableBody(data, columns)
+                }
+            };
         }
 
     return {
@@ -91,9 +118,17 @@ function crearModuloPdf() {
             return template;
         },
 
-        crearContent: function (template) {
-            const content;
-            
+        /**
+         * 
+         * @param {template} template se obtiene como resultado de invocar a la funcion crearTemplate.
+         * @param {string[]} columnas Titulos de las columnas
+         * @param {Object[]} datos Datos a representar en la tabla
+         */
+        crearContent: function (template, columnas, datos) {
+            const content = template;
+            content.content = [
+                table(datos, columnas)
+            ]
             return content;
         },
 
@@ -108,13 +143,13 @@ function crearModuloPdf() {
             content.info.title = title;
             content.info.author = author;
             content.info.subject = subject;
-            pdfDoc = imprimirPDF(docDefinition);
+            const pdfDoc = imprimirPDF(docDefinition, content);
+            return pdfDoc;
         }, 
         guardarDoc: async function(fileName, path, doc){
-            saveDoc(path, fileName, doc);
+            await saveDoc(path, fileName, doc);
         } 
     }
 }
 
 module.exports = { crearModuloPdf }
-  

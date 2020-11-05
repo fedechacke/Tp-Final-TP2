@@ -53,12 +53,14 @@ function crearModuloMailing(mailService, username, password) {
             
             await transporter.sendMail(mailData, (err, info) => {
                 if (err){
-                    console.log(`Error: ${err.message}`);
+                    throw new Error(`Error: ${err.message}`);
+                    //console.log(`Error: ${err.message}`);
                 } else {
                     if (info.accepted){
                         //console.log(`Mail enviado con exito a: ${info.accepted}`)
                     }
                     if (info.rejected){
+                        //enviar mail al emisor
                         //console.log(`Mail rechazados: ${info.rejected}`)
                     }
                     if (info.pending){

@@ -29,11 +29,11 @@ function crearModuloMailing(mailService, username, password) {
         }
 
         if (filePath != undefined && fileName != undefined){
-            let ext = filePath.substr(filePath.lastIndexOf('.') + 1);
+            let ext = filePath.substr(filePath.lastIndexOf('.'));
             mailData.attachments = [{
-                filename: fileName,
+                filename: fileName + ext,
                 path: filePath,
-                contentType: "application/"+ext
+                contentType: `application/${ext}`
             }]
         }
         return mailData; 

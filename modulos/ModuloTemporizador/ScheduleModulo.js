@@ -2,7 +2,7 @@ const schedule = require('node-schedule'); //librería para temporizador
 const shell = require('shelljs') //acceder a la consola desde el programa
 
   function crearTemporizadorDeEventos() {
-   
+
   function crearEvento(rule, id, callback) { //crea el evento en cada metodo
     const j = schedule.scheduleJob(id, rule, callback)
     return j

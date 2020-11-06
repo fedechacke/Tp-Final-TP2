@@ -1,12 +1,13 @@
-function crearCu(generadorPdf, moduloSchedule, moduloMail) {
+function crearCu(generadorPdf, moduloSchedule, moduloMail, dao) {
     return {
-        invocar: function (data) {
+        invocar: async function (tempo) {
             // aca va toda la logica del CU
+            const data = await dao.getDesempenos();
             
             const columnas = Object.keys(data[0]);
             
-            moduloSchedule.repetirMensualmente(01,00,00,00, 'Id', function () {
-                const template = generadorPdf.crearTemplate('Helvetica', 15, false, 'A4', 'landscape');
+            tempo(01,00,00,00, 'Id', function () {
+                const template = generadorPdf.crearTemplate('Ejecutivo');
                 const content = generadorPdf.crearContent(template, columnas, data);
                 const doc = generadorPdf.crearDoc('Mi tabla', 'Yo', 'Tabla de personas', content);
                 generadorPdf.guardarDoc('PdfCU3', './CU/assets', doc);

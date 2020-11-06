@@ -104,16 +104,39 @@ function crearModuloPdf() {
                                     'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'
         *@param {string} pageOrientation: The orientation of the page. Can be landscape or portrait
         */ 
-        crearTemplate: function(font, fontSize, isBold, pageSize, pageOrientation) {
-            const template = docDefinition;
 
-            template.pageOrientation = pageOrientation;
-            template.pageSize = pageSize;
-            template.defaultStyle.font = font;
-            template.defaultStyle.fontSize = fontSize;
-            template.defaultStyle.bold = isBold;
-            template.info.creator = 'Mi módulo de PDF';
-            template.info.producer = 'También mi módulo de PDF';
+        /**
+         * 
+         * @param {string} estilo: El estilo deseado para el documento. Puede ser Ejecutivo o Casual.
+         */
+        crearTemplate: function(estilo) {
+            
+            const template = docDefinition;
+            
+            switch (estilo) {
+                case 'Ejecutivo':
+                    template.pageOrientation = 'landscape';
+                    template.pageSize = 'A4';
+                    template.defaultStyle.font = 'Courier';
+                    template.defaultStyle.fontSize = 14;
+                    template.defaultStyle.bold = true;
+                    template.defaultStyle.italics = true;
+                    template.info.creator = 'Mi módulo de PDF';
+                    template.info.producer = 'También mi módulo de PDF';
+                    break;
+                case 'Casual':
+                    template.pageOrientation = 'portrait';
+                    template.pageSize = 'A4';
+                    template.defaultStyle.font = 'Helvetica';
+                    template.defaultStyle.fontSize = 15;
+                    template.defaultStyle.bold = false;
+                    template.info.creator = 'Mi módulo de PDF';
+                    template.info.producer = 'También mi módulo de PDF';
+                    break;
+                default:
+                    break;
+            }
+
 
             return template;
         },

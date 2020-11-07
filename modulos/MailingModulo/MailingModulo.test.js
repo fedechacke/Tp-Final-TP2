@@ -1,6 +1,6 @@
-const { crearModuloMailing } = require('./MailingModulo.js')
+const { mailerFactory } = require('../../Factories/FactoryModuloMailing.js')
 
-const modulo = crearModuloMailing('gmail', 'gestion.remiseria@gmail.com', 'TPgrupal2-');
+const modulo = mailerFactory.getMailer();
 
 const addreses = ['asdasd@asdasd.com', 'sabrina-martinez@hotmail.es'];
 

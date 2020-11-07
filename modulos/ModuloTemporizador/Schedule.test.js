@@ -1,6 +1,6 @@
-const { crearTemporizadorDeEventos } = require('./ScheduleModulo')
+const { tempoFactory } = require('../../Factories/FactoryModuloSchedule.js')
 
-const temporizador = crearTemporizadorDeEventos();
+const temporizador = tempoFactory.getTempo();
 /* temporizador.repetirDiariamente(21,43,0, function() {
     console.log('se esta repitiendo diaramente')
 })

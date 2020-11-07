@@ -10,6 +10,8 @@ const _ = require('lodash');
 const multer = require('multer');
 const { mv } = require('shelljs');
 const router = express.Router();
+const { crearFactoryCu } = require('../Factories/Zeus/MegaFactoryCU.js');
+const { crearTempo } = require('./DaoTempo.js');
 
 
 async function main () {
@@ -32,9 +34,41 @@ function crearServidor(puerto, db) {
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(morgan('dev'));
 
+        app.post('/api/remiseria/cu1', (req, res) => {
+            const mail = req.body;
+            const cu = crearFactoryCu('1');
+            cu.getCu().invocar(crearTempo(mail.tempo), mail.subject, mail.body, mail.addreses);
+            res.send('Lo lograste!!!');
+        })
 
-        app.get('/api/remiseria/autos', async (req, res) => {
-           
+        app.post('/api/remiseria/cu1', (req, res) => {
+            const mail = req.body;
+            const cu = crearFactoryCu('1');
+            cu.getCu().invocar(crearTempo(mail.tempo), mail.subject, mail.body, mail.addreses);
+            res.send('Lo lograste!!!');
+        })
+
+        app.post('/api/remiseria/cu2', (req, res) => {
+            const mail = req.body;
+            const cu = crearFactoryCu('2');
+            cu.getCu().invocar(mail.addreses,mail.subject, mail.body, mail.file.fileName, mail.file.filePath);
+            res.send('Lo lograste!!!');
+        })
+
+        app.post('/api/remiseria/cu3', (req, res) => {
+            const mail = req.body;
+            const cu = crearFactoryCu('3');
+            cu.getCu().invocar(crearTempo(mail.tempo), mail.addreses,mail.subject, mail.body, mail.file.fileName, mail.file.filePath);
+            res.send('Lo lograste!!!');
+        })
+
+        app.post('/api/remiseria/cu4', (req, res) => {
+            const timeRule = req.body;
+            const cu = crearFactoryCu('4');
+            cu.getCu().invocar(crearTempo(timeRule.tempo));
+            res.send('Lo lograste!!!');
+        })
+        /* app.get('/api/remiseria/autos', async (req, res) => {
             let autos
 
             if(req.query.patente){
@@ -54,7 +88,7 @@ function crearServidor(puerto, db) {
                 choferes = await db.getAllChoferes()
             }
             res.json(choferes)
-        })
+        }) */
 
         app.get('/remiseria/download/:id', async (req, res) => {
             if (req.params.id > 0){
@@ -93,13 +127,7 @@ function crearServidor(puerto, db) {
             }
 
             });
-
-                
-
-
-
-
-        app.post('/api/remiseria/autos', async (req, res) => {
+        /* app.post('/api/remiseria/autos', async (req, res) => {
             const auto = req.body
             
             try {
@@ -114,7 +142,7 @@ function crearServidor(puerto, db) {
                 res.status(400).json({ message: error.message })
             }
                 
-        })
+        }) */
         /* app.post('/api/estudiantes', async (req, res) => {
             const estuCreado = req.body
             estuCreado.id = nextId++

@@ -27,7 +27,7 @@ function crearServidor(puerto, db) {
         app.post('/api/remiseria/cu1', (req, res) => {
             const mail = req.body;
             const cu = crearFactoryCu('1');
-            cu.getCu().invocar(crearTempo(mail.tempo), mail.subject, mail.body, mail.addreses);
+            cu.getCu().invocar(mail.scheduleDao, mail.setTemporizador, mail.subject, mail.body, mail.addreses);
             res.send('Lo lograste!!!');
         })
 
@@ -41,14 +41,14 @@ function crearServidor(puerto, db) {
         app.post('/api/remiseria/cu3', (req, res) => {
             const mail = req.body;
             const cu = crearFactoryCu('3');
-            cu.getCu().invocar(crearTempo(mail.tempo), mail.addreses,mail.subject, mail.body, mail.file.fileName, mail.file.filePath);
+            cu.getCu().invocar(mail.scheduleDao, mail.setTemporizador, mail.addreses,mail.subject, mail.body, mail.file.fileName, mail.file.filePath);
             res.send('Lo lograste!!!');
         })
 
         app.post('/api/remiseria/cu4', (req, res) => {
             const timeRule = req.body;
             const cu = crearFactoryCu('4');
-            cu.getCu().invocar(crearTempo(timeRule.tempo));
+            cu.getCu().invocar(timeRule.scheduleDao, timeRule.setTemporizador,);
             res.send('Lo lograste!!!');
         })
         /* app.get('/api/remiseria/autos', async (req, res) => {

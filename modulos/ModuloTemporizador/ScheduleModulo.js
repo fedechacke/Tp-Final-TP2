@@ -33,30 +33,36 @@ const shell = require('shelljs') //acceder a la consola desde el programa
 
     return {
 
-        repetirSemanalmente: function(diaDeLaSemana, hora, minuto, segundo, id, callback ) {
-            //let j = schedule.scheduleJob(`*/${segundo} */${minuto} */${hora} * * */${diaDeLaSemana}`, callback);
+        repetirSemanalmente: function( scheduleObject, callback ) {
             try {
-              const rule = crearRule ({dayOfWeek:diaDeLaSemana, hour:hora, minute:minuto, second:segundo})
-              const j = crearEvento (rule, id, callback)
+              const rule = crearRule ({dayOfWeek:scheduleObject.diaDeLaSemana,
+                                      hour:scheduleObject.hora,
+                                      minute:scheduleObject.minuto,
+                                      second:scheduleObject.segundo})
+              const j = crearEvento (rule, scheduleObject.id, callback)
             } catch (error) {
                 console.log(error.message)
             }
         },
 
-        repetirMensualmente: function(diaDelMes, hora, minuto, segundo, id, callback) {
+        repetirMensualmente: function(scheduleObject, callback) {
             try {
-                const rule = crearRule({date:diaDelMes, hour:hora, minute:minuto, second:segundo})
-                const j = crearEvento (rule, id, callback)
+                const rule = crearRule({date: scheduleObject.diaDelMes,
+                                        hour: scheduleObject.hora,
+                                        minute: scheduleObject.minuto,
+                                        second: scheduleObject.segundo})
+                const j = crearEvento (rule, scheduleObject.id, callback)
             } catch (error) {
                 console.log(error.message)
             }
-            
         },
 
-        repetirDiariamente: function(hora, minuto, segundo, id, callback) {
+        repetirDiariamente: function(scheduleObject, callback) {
             try {
-                const rule = crearRule({hour:hora, minute:minuto, second:segundo})
-                const j = crearEvento (rule, id, callback)
+                const rule = crearRule({hour: scheduleObject.hora,
+                                        minute: scheduleObject.minuto,
+                                        second: scheduleObject.segundo})
+                const j = crearEvento (rule, scheduleObject.id, callback)
             } catch (error) {
                 console.log(error.message)
             }

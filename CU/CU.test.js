@@ -3,9 +3,19 @@ const { crearTempo } = require('../src/DaoTempo.js');
 
 const addreses = ['sabrina-martinez@hotmail.es'];
 
+const setTemporizador = { 
+    diaDelMes: 12,
+    hora: 19,
+    minuto: 50,
+    segundo: 00,
+    id: 'id'
+}
+
+const scheduleDao = crearTempo('mensual');
+
 function main () {
     const cu = factoryCu1.getCu();
-    cu.invocar(crearTempo('mensual'),'Aviso de Pagos','Pagarle a los empleados', addreses);
+    cu.invocar(scheduleDao, setTemporizador,'Aviso de Pagos','Pagarle a los empleados', addreses);
 
 }
 main ();

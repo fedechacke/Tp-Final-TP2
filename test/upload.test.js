@@ -1,5 +1,4 @@
 const { crearCliente } = require('../src/ClienteRest.js')
-const request = require('request')
 const fs = require('fs')
 const { crearServidor } = require('../src/Server.js')
 const axios = require('axios')
@@ -14,19 +13,18 @@ async function main(){
         
         const form = new FormData();
         const stream = fs.createReadStream('post.png');
-
-
-        form.append('image', stream);
-        form.name = 'nachito'
-        const formHeaders = form.getHeaders();
         
 
+        form.append('image', stream);
+    /*         form.name = 'nachito' */
+        const formHeaders = form.getHeaders();
+        
         axios.post(`http://localhost:${server.address().port}/remiseria/upload`, form, {
         headers: {
             ...formHeaders,
         },
         name: 'nachito',
-        tempFilePath: './uploads'
+        tempFilePath: '../uploads/'
         })
         .then(response => response)
         .catch(error => error)

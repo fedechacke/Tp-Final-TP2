@@ -1,15 +1,10 @@
 const express = require('express')
 const fs = require('fs')
-const { crearModuloPdf } = require('../modulos/PdfGeneratorModule/PdfGeneratorModule.js');
-const request = require('request');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const _ = require('lodash');
 const multer = require('multer');
-const { mv } = require('shelljs');
-const router = express.Router();
 const { crearFactoryCu } = require('../Factories/Zeus/MegaFactoryCU.js');
 const { crearTempo } = require('./DaoTempo.js');
 
@@ -25,13 +20,8 @@ function crearServidor(puerto, db) {
         const app = express()
 
         app.use(express.json())
-        app.use(fileUpload({
-            createParentPath: true
-        }));
-        //add other middleware
+        app.use(fileUpload({createParentPath: true}));
         app.use(cors());
-        app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({extended: true}));
         app.use(morgan('dev'));
 
         app.post('/api/remiseria/cu1', (req, res) => {
@@ -90,38 +80,25 @@ function crearServidor(puerto, db) {
             res.json(choferes)
         }) */
 
-        app.get('/remiseria/download/:id', async (req, res) => {
-            if (req.params.id > 0){
-                const data =fs.readFileSync(`./Demo.pdf`);
-                res.contentType("application/pdf");
-                res.send(data);
-            }
+        app.get('/remiseria/reportes', async (req, res) => {
+            const data =fs.readFileSync(`./Demo.pdf`);
+            res.contentType("application/pdf");
+            res.send(data);
         })
 
-        /////////////////////////////////////////////////////////////////////////////
-
-
-        let storage = multer.diskStorage({
-            destination: (req, file, cb) => {
-                cb(null, './uploads')
-
-            },
-            filename: (req,file, cb) => {
-                cb(null, file.originalname)
-            }
-        })
         let upload = multer({dest: './uploads/'});
 
-        app.post('/remiseria/upload', upload.single('nachito'), async (req, res) => {
+        app.post('/remiseria/imagenes', upload.single('nachito'), async (req, res) => {
             try {
                 let archivo = req.files.image
-                archivo.mv('./uploads', err => {
+                console.log(archivo)
+                archivo.mv('../uploads', err => {
                     if(err){
                        throw err.message
                     }
                 })
-                res.send(req.files);
                 console.log('HIZO EL UPLOAD')
+                res.send(archivo);
             } catch (error) {
                 throw error.message
             }

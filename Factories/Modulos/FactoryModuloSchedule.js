@@ -1,4 +1,4 @@
-const { crearTemporizadorDeEventos } = require ('../modulos/ModuloTemporizador/ScheduleModulo.js');
+const { crearTemporizadorDeEventos } = require ('../../modulos/ModuloTemporizador/ScheduleModulo.js');
 
 /*const config = require('config');
 const credentials = {

@@ -1,4 +1,4 @@
-const { crearModuloMailing } = require ('../modulos/MailingModulo/MailingModulo.js');
+const { crearModuloMailing } = require ('../../modulos/MailingModulo/MailingModulo.js');
 
 /*const config = require('config');
 const credentials = {

@@ -52,6 +52,15 @@ function crearCliente( urlServidor, puerto, rutaApi ) {
                 // throw error
                 console.log(err.message, 'HOLA')
             }
+        },
+        addCU1: async(data) => {
+            try {
+                const response = await axios.post(`${urlServidor}:${puerto}${rutaApi}`, data)
+                return [response.data]
+            }
+            catch (error) {
+                console.log(error.message)
+            }
         }
     }
 }

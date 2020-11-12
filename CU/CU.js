@@ -1,10 +1,10 @@
-function crearCu(moduloMail, moduloSchedule) {
+function crearCu(moduloMail) {
     return {
-        invocar: function (dao, subject, body, addreses) {
+        invocar: function (scheduleDao, subject, body, addreses) {
             // aca va toda la logica del CU
 
-            // dao(04,00,00,00, 'Id', function () {
-                dao(05,21,39,00, 'id', function(){
+            // scheduleDao(04,00,00,00, 'Id', function () {
+                scheduleDao(12,19,50,00, 'id', function(){
                     moduloMail.enviarMail(addreses, subject, body)
             });
         }

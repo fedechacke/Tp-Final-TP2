@@ -3,7 +3,7 @@ const fs = require('fs')
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const morgan = require('morgan');
-const _ = require('lodash');
+// const _ = require('lodash');
 const multer = require('multer');
 const { crearFactoryCu } = require('../Factories/Zeus/MegaFactoryCU.js');
 const { crearTempo } = require('./DaoTempo.js');
@@ -23,13 +23,6 @@ function crearServidor(puerto, db) {
         app.use(fileUpload({createParentPath: true}));
         app.use(cors());
         app.use(morgan('dev'));
-
-        app.post('/api/remiseria/cu1', (req, res) => {
-            const mail = req.body;
-            const cu = crearFactoryCu('1');
-            cu.getCu().invocar(crearTempo(mail.tempo), mail.subject, mail.body, mail.addreses);
-            res.send('Lo lograste!!!');
-        })
 
         app.post('/api/remiseria/cu1', (req, res) => {
             const mail = req.body;

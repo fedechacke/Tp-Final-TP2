@@ -1,4 +1,4 @@
-const { crearCu } = require('../../CU/CU4.js');
+const { crearCu } = require('../../CU/ReporteEstadistico.js');
 const { pdfFactory } = require('../../Factories/Modulos/FactoryModuloPdfGenerator.js');
 const { tempoFactory } = require('../../Factories/Modulos/FactoryModuloSchedule.js');
 const { crearDao } = require('../../src/DaoFactory.js');
@@ -9,10 +9,10 @@ const dao = crearDao('campanas');
 
 const cu = crearCu(pdfGenerator, tempo, dao);
 
-const factoryCu4 = {
+const factoryRepEst = {
     getCu: function () {
         return cu;
     }
 }
 
-module.exports = { factoryCu4 };
+module.exports = { factoryRepEst };

@@ -24,32 +24,49 @@ function crearServidor(puerto, db) {
         app.use(cors());
         app.use(morgan('dev'));
 
-        app.post('/api/remiseria/cu1', (req, res) => {
-            const mail = req.body;
+        app.post('/api/remiseria/recopago', (req, res) => {
+            const form = req.body;
             const cu = crearFactoryCu('1');
-            cu.getCu().invocar(mail.scheduleDao, mail.setTemporizador, mail.subject, mail.body, mail.addreses);
-            res.send('Lo lograste!!!');
+            try {
+                cu.getCu().invocar(form.frecuencia, form.tempRules, form.asunto, form.cuerpo, form.direcciones);
+                res.status(204).send();
+            }
+            catch (error) {
+                console.log(error.message);
+            }
         })
 
-        app.post('/api/remiseria/cu2', (req, res) => {
-            const mail = req.body;
+        app.post('/api/remiseria/resdesemp', (req, res) => {
+            const form = req.body;
             const cu = crearFactoryCu('2');
-            cu.getCu().invocar(mail.addreses,mail.subject, mail.body, mail.file.fileName, mail.file.filePath);
-            res.send('Lo lograste!!!');
+            try {
+                cu.getCu().invocar(form.direcciones, form.asunto, form.cuerpo, form.archivo.nombreArchivo, form.archivo.rutaArchivo);
+                res.status(204).send(); 
+            } catch (error) {
+                
+            }
         })
 
-        app.post('/api/remiseria/cu3', (req, res) => {
-            const mail = req.body;
+        app.post('/api/remiseria/maildesemp', (req, res) => {
+            const form = req.body;
             const cu = crearFactoryCu('3');
-            cu.getCu().invocar(mail.scheduleDao, mail.setTemporizador, mail.addreses,mail.subject, mail.body, mail.file.fileName, mail.file.filePath);
-            res.send('Lo lograste!!!');
+            try {
+                cu.getCu().invocar(form.frecuencia, form.tempRules, form.direcciones, form.asunto, form.cuerpo, form.archivo.nombreArchivo, form.archivo.rutaArchivo);
+                res.status(204).send();
+            } catch (error) {
+                console.log(error.message)
+            }
         })
 
-        app.post('/api/remiseria/cu4', (req, res) => {
-            const timeRule = req.body;
+        app.post('/api/remiseria/repostats', (req, res) => {
+            const tempRules = req.body;
             const cu = crearFactoryCu('4');
-            cu.getCu().invocar(timeRule.scheduleDao, timeRule.setTemporizador,);
-            res.send('Lo lograste!!!');
+            try {
+                cu.getCu().invocar(tempRules.frecuencia, tempRules.tempRules,);
+                res.status(200).send();
+            } catch (error) {
+                console.log(error.message)
+            }
         })
         /* app.get('/api/remiseria/autos', async (req, res) => {
             let autos

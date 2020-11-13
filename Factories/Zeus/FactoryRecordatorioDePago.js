@@ -1,4 +1,4 @@
-const { crearCu } = require('../../CU/CU.js');
+const { crearCu } = require('../../CU/RecordatorioDePago.js');
 const { mailerFactory } = require('../../Factories/Modulos/FactoryModuloMailing.js');
 const { tempoFactory } = require('../../Factories/Modulos/FactoryModuloSchedule.js');
 
@@ -7,10 +7,10 @@ const tempo = tempoFactory.getTempo();
 
 const cu = crearCu(mailer, tempo);
 
-const factoryCu1 = {
+const factoryRecPago = {
     getCu: function () {
         return cu;
     }
 }
 
-module.exports = { factoryCu1 };
+module.exports = { factoryRecPago };

@@ -1,10 +1,6 @@
-const { crearTemporizadorDeEventos } = require ('../../modulos/ModuloTemporizador/ScheduleModulo.js');
+const { crearTempo } = require('../../src/DaoTempo')
 
-/*const config = require('config');
-const credentials = {
-    config.user, config.pass
-}*/
-const tempo = crearTemporizadorDeEventos();
+const tempo = crearTempo;
 
 const tempoFactory = {
     getTempo : function () {

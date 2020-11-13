@@ -6,23 +6,20 @@ const { tempoFactory } = require('./../Factories/Modulos/FactoryModuloSchedule.j
 const { mailerFactory } = require('./../Factories/Modulos/FactoryModuloMailing.js'); */
 const { crearServidor } = require('../src/Server.js')
 const { crearCliente } = require('../src/ClienteRest.js')
-const { crearTempo } = require('../src/DaoTempo.js')
 
 async function main() {
     const server = await crearServidor(0)
     const cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/cu1')
 
-    const scheduleDao = crearTempo('mensual');
     const setTemporizador = { 
         diaDelMes: 12,
-        hora: 19,
-        minuto: 50,
+        hora: 20,
+        minuto: 57,
         segundo: 00,
         id: 'id'
     }
     
     cliente.addCU1({
-        scheduleDao: scheduleDao,
         setTemporizador: setTemporizador,
         tempo:'mensual',
         subject:'mail de prueba',

@@ -1,7 +1,8 @@
 function crearCu(moduloMail, generadorPdf, dao) {
+
     return {
-        invocar: async function (addreses,subject, body, fileName, filePath) {
-            // aca va toda la logica del CU
+        
+        invocar: async function (direcciones, asunto, cuerpo, nombreArchivo, rutaArchivo) {
 
             const data = await dao.getDesempenos();
             
@@ -12,7 +13,7 @@ function crearCu(moduloMail, generadorPdf, dao) {
             const doc = generadorPdf.crearDoc('Mi tabla', 'Yo', 'Tabla de personas', content);
             await generadorPdf.guardarDoc('PdfCU2', './CU/assets', doc); 
             
-            moduloMail.enviarMail(addreses,subject, body, fileName, filePath);
+            moduloMail.enviarMail(direcciones, asunto, cuerpo, nombreArchivo, rutaArchivo);
         }
     }
 }

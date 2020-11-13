@@ -3,7 +3,7 @@ const axios = require('axios')
 function crearCliente( urlServidor, puerto, rutaApi ) {
     
     return {
-        getAllAutos: async () => {
+        /* getAllAutos: async () => {
             const respuesta = await axios.get(`${urlServidor}:${puerto}${rutaApi}`)
             return respuesta.data
         },
@@ -41,7 +41,7 @@ function crearCliente( urlServidor, puerto, rutaApi ) {
         },
         addAutoStats: async (statsFile) => {
 
-        },
+        }, */
         addNewFile: async (file) => {
             try {
                 const respuesta = await axios.post(`${urlServidor}:${puerto}${rutaApi}`, file)
@@ -53,7 +53,7 @@ function crearCliente( urlServidor, puerto, rutaApi ) {
                 console.log(err.message, 'HOLA')
             }
         },
-        addCU1: async(data) => {
+        addRecordatorioDePago: async(data) => {
             try {
                 const response = await axios.post(`${urlServidor}:${puerto}${rutaApi}`, data)
                 return [response.data]
@@ -61,8 +61,33 @@ function crearCliente( urlServidor, puerto, rutaApi ) {
             catch (error) {
                 console.log(error.message)
             }
+        },
+        sendNewResumenDesempeno: async(data) => {
+            try {
+                const response = await axios.post(`${urlServidor}:${puerto}${rutaApi}`, data)
+                return [response.data]
+            }
+            catch (error) {
+                console.log(error.message)
+            }
+        },
+        addNewTimedDesempenoEmail: async(data) => {
+            try {
+                const response = await axios.post(`${urlServidor}:${puerto}${rutaApi}`, data)
+                return [response.data]
+            } catch (error) {
+                console.log(error.message)
+            }
+        },
+        addNewTimedReporteEstadistico: async(data) => {
+            try {
+                const response = await axios.post(`${urlServidor}:${puerto}${rutaApi}`, data)
+                return [response.data]
+            } catch (error) {
+                console.log(error.message)
+            }
         }
     }
-}
+}   
 
 module.exports = { crearCliente }

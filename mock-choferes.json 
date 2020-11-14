@@ -1,0 +1,12 @@
+{
+    "nombre": "Sabrina",
+    "apellido": "Martinez",
+    "unidadACargo": "AA000AA",
+    "recaudacion": "4"
+},
+{
+    "nombre": "Tomas",
+    "apellido": "Lozano",
+    "unidadACargo": "ZZ999ZZ",
+    "recaudacion": "0"
+}

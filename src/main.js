@@ -10,7 +10,7 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
     //res.json({ contenedor: miContenedor })
-     var data =fs.readFileSync('./Demo.pdf');
+    var data =fs.readFileSync('./Demo.pdf');
             res.contentType("application/pdf");
             res.send(data); 
             

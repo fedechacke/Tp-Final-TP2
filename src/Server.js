@@ -6,8 +6,6 @@ const morgan = require('morgan');
 // const _ = require('lodash');
 const multer = require('multer');
 const { crearFactoryCu } = require('../Factories/Zeus/MegaFactoryCU.js');
-const { crearTempo } = require('./DaoTempo.js');
-
 
 async function main () {
     await crearServidor(4200);
@@ -15,8 +13,10 @@ async function main () {
 
 main()
 
-function crearServidor(puerto, db) {
-    return new Promise((resolve, reject) => {
+async function crearServidor(puerto, db) {
+    return new Promise(async (resolve, reject) => {
+
+        await db.conect();
         const app = express()
 
         app.use(express.json())
@@ -39,8 +39,9 @@ function crearServidor(puerto, db) {
         app.post('/api/remiseria/resdesemp', (req, res) => {
             const form = req.body;
             const cu = crearFactoryCu('2');
+            const desempenos = db.getDesempenos();
             try {
-                cu.getCu().invocar(form.direcciones, form.asunto, form.cuerpo, form.archivo.nombreArchivo, form.archivo.rutaArchivo);
+                cu.getCu().invocar(form.direcciones, form.asunto, form.cuerpo, form.archivo.nombreArchivo, form.archivo.rutaArchivo, desempenos);
                 res.status(204).send(); 
             } catch (error) {
                 
@@ -50,8 +51,9 @@ function crearServidor(puerto, db) {
         app.post('/api/remiseria/maildesemp', (req, res) => {
             const form = req.body;
             const cu = crearFactoryCu('3');
+            const desempenos = db.getDesempenos();
             try {
-                cu.getCu().invocar(form.frecuencia, form.tempRules, form.direcciones, form.asunto, form.cuerpo, form.archivo.nombreArchivo, form.archivo.rutaArchivo);
+                cu.getCu().invocar(form.frecuencia, form.tempRules, form.asunto, form.cuerpo, form.direcciones, form.archivo.nombreArchivo, form.archivo.rutaArchivo, desempenos);
                 res.status(204).send();
             } catch (error) {
                 console.log(error.message)
@@ -61,8 +63,9 @@ function crearServidor(puerto, db) {
         app.post('/api/remiseria/repostats', (req, res) => {
             const tempRules = req.body;
             const cu = crearFactoryCu('4');
+            const campanas = db.getCampanas();
             try {
-                cu.getCu().invocar(tempRules.frecuencia, tempRules.tempRules,);
+                cu.getCu().invocar(tempRules.frecuencia, tempRules.tempRules, campanas);
                 res.status(200).send();
             } catch (error) {
                 console.log(error.message)
@@ -104,7 +107,7 @@ function crearServidor(puerto, db) {
                 console.log(archivo)
                 archivo.mv('../uploads', err => {
                     if(err){
-                       throw err.message
+                        throw err.message
                     }
                 })
                 console.log('HIZO EL UPLOAD')
@@ -141,11 +144,14 @@ function crearServidor(puerto, db) {
                 res.status(400).json({ message: error.message })
             }
         })
- */
+        */
+        db.close();
         const server = app.listen(puerto)
             .on('listening', () => resolve(server))
             .on('error', () => reject(new Error('address in use')))
         });
+
+
 }
 
 module.exports = { crearServidor }

@@ -16,7 +16,6 @@ main()
 async function crearServidor(puerto, db) {
     return new Promise(async (resolve, reject) => {
 
-        await db.conect();
         const app = express()
 
         app.use(express.json())
@@ -36,10 +35,10 @@ async function crearServidor(puerto, db) {
             }
         })
 
-        app.post('/api/remiseria/resdesemp', (req, res) => {
+        app.post('/api/remiseria/resdesemp', async (req, res) => {
             const form = req.body;
             const cu = crearFactoryCu('2');
-            const desempenos = db.getDesempenos();
+            const desempenos = await db.getDesempenos();
             try {
                 cu.getCu().invocar(form.direcciones, form.asunto, form.cuerpo, form.archivo.nombreArchivo, form.archivo.rutaArchivo, desempenos);
                 res.status(204).send(); 
@@ -48,10 +47,10 @@ async function crearServidor(puerto, db) {
             }
         })
 
-        app.post('/api/remiseria/maildesemp', (req, res) => {
+        app.post('/api/remiseria/maildesemp', async (req, res) => {
             const form = req.body;
             const cu = crearFactoryCu('3');
-            const desempenos = db.getDesempenos();
+            const desempenos = await db.getDesempenos();
             try {
                 cu.getCu().invocar(form.frecuencia, form.tempRules, form.asunto, form.cuerpo, form.direcciones, form.archivo.nombreArchivo, form.archivo.rutaArchivo, desempenos);
                 res.status(204).send();
@@ -60,10 +59,10 @@ async function crearServidor(puerto, db) {
             }
         })
 
-        app.post('/api/remiseria/repostats', (req, res) => {
+        app.post('/api/remiseria/repostats', async (req, res) => {
             const tempRules = req.body;
             const cu = crearFactoryCu('4');
-            const campanas = db.getCampanas();
+            const campanas = await db.getCampanas();
             try {
                 cu.getCu().invocar(tempRules.frecuencia, tempRules.tempRules, campanas);
                 res.status(200).send();
@@ -145,7 +144,6 @@ async function crearServidor(puerto, db) {
             }
         })
         */
-        db.close();
         const server = app.listen(puerto)
             .on('listening', () => resolve(server))
             .on('error', () => reject(new Error('address in use')))

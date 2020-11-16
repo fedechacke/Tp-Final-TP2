@@ -3,7 +3,6 @@ function crearCu(moduloMail, generadorPdf) {
     return {
         
         invocar: async function (direcciones, asunto, cuerpo, nombreArchivo, rutaArchivo, data) {
-
             try {
                 const columnas = Object.keys(data[0]);
                 

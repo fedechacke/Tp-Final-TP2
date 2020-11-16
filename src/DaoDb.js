@@ -2,7 +2,7 @@ const { MongoClient } = require("mongodb")
 
 function crearDaoDb() {
 
-    const client = new MongoClient('mongodb://localhost:27017'/* , { useUnifiedTopology: true,  } */)
+    const client = new MongoClient('mongodb+srv://Tomi92:Tomi92@cluster0.f0z9j.mongodb.net/TPFinal?retryWrites=true&w=majority', { useUnifiedTopology: true,  })
 
     const elementos = []
     return {

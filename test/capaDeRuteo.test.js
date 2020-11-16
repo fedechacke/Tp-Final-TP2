@@ -2,17 +2,16 @@ const { crearServidor } = require('../src/Server.js')
 const { crearCliente } = require('../src/ClienteRest.js')
 const { crearDao } = require('../src/DaoFactory')
 
-const diaDelMes = 14;
-const hora = 01;
-const minuto = 45;
+const diaDelMes = 16;
+const hora = 20;
+const minuto = 34;
 const segundo = 00;
 
-const db = crearDao('db');
 
-async function recoPago() {
-    const server = await crearServidor(0, db)
+
+async function recoPago(server) {
     const cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/recopago')
-
+    
     const tempRulesRecoPago = { 
         diaDelMes: diaDelMes,
         hora: hora,
@@ -20,8 +19,6 @@ async function recoPago() {
         segundo: segundo,
         id: 'id'
     }
-    
-    // await db.connect();
 
     await cliente.addRecordatorioDePago({
         tempRules: tempRulesRecoPago,
@@ -31,16 +28,10 @@ async function recoPago() {
         direcciones:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com']
     });
 
-    // await db.close();
-
 }
 
-async function resuDesemp() {
-
-    const server = await crearServidor(0, db)
+async function resuDesemp(server) {
     const cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/resdesemp')
-
-    // await db.connect();
 
     await cliente.sendNewResumenDesempeno({
         asunto:'mail de prueba',
@@ -50,17 +41,10 @@ async function resuDesemp() {
             nombreArchivo: 'UnPdf',
             rutaArchivo: './CU/assets/PdfCU2.pdf'
         }
-    })
-
-    // await db.close();
-
+    });
 }
-async function repoStats() {
-
-const server = await crearServidor(0, db)
+async function repoStats(server) {
     const cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/repostats')
-
-    // await db.connect();
 
     const tempRulesRepoStats = {
         hora: hora,
@@ -73,15 +57,9 @@ const server = await crearServidor(0, db)
         tempRules: tempRulesRepoStats,
         frecuencia:'diario'
     });
-
-    // await db.close();
 }
-async function emailDesemp() {
-
-    const server = await crearServidor(0, db)
+async function emailDesemp(server) {
     const cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/maildesemp')
-
-    // await db.connect();
 
     const tempRulesDesempMail = { 
         diaDelMes: diaDelMes,
@@ -102,11 +80,17 @@ async function emailDesemp() {
             rutaArchivo: './CU/assets/PdfCU3.pdf'
         }
     });
-
-    // await db.close()
 }
 
-recoPago();
-resuDesemp();
-repoStats();
-emailDesemp();
+async function main() {
+    const db = crearDao('db');
+    const server = await crearServidor(0, db)
+    await db.connect();
+    await recoPago(server);
+    await resuDesemp(server);
+    await repoStats(server);
+    await emailDesemp(server);
+    await db.close();
+}
+
+main();

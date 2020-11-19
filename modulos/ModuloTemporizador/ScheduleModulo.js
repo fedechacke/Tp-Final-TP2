@@ -1,5 +1,6 @@
 const schedule = require('node-schedule'); //librería para temporizador 
 const shell = require('shelljs') //acceder a la consola desde el programa
+const { crearErrorDeUsuario, crearErrorDelServidor } = require('../../src/DaoErrores.js')
 
   function crearTemporizadorDeEventos() {
 
@@ -10,13 +11,17 @@ const shell = require('shelljs') //acceder a la consola desde el programa
 
   function crearRule (config) { //se usa para crear las rules para los metodos propios del modulo
     const rule = new schedule.RecurrenceRule();
-    if (config.second) rule.second = config.second
-    if (config.minute) rule.minute = config.minute
-    if (config.hour) rule.hour = config.hour
-    if (config.dayOfWeek) rule.dayOfWeek = config.dayOfWeek
-    if (config.date) rule.date = config.date
-    if (config.month) rule.month = config.month
-    if (config.year) rule.year = config.year
+    if (config){
+      if (config.second) rule.second = config.second
+      if (config.minute) rule.minute = config.minute
+      if (config.hour) rule.hour = config.hour
+      if (config.dayOfWeek) rule.dayOfWeek = config.dayOfWeek
+      if (config.date) rule.date = config.date
+      if (config.month) rule.month = config.month
+      if (config.year) rule.year = config.year
+    } else {
+      throw crearErrorDeUsuario("Debe proveer los datos necesarios para la creacion de la temporizacion")
+    }
     return rule
   }
 
@@ -41,7 +46,7 @@ const shell = require('shelljs') //acceder a la consola desde el programa
                                       second:scheduleObject.segundo})
               const j = crearEvento (rule, scheduleObject.id, callback)
             } catch (error) {
-                console.log(error.message)
+              throw crearErrorDelServidor(error.message);
             }
         },
 
@@ -53,7 +58,7 @@ const shell = require('shelljs') //acceder a la consola desde el programa
                                         second: scheduleObject.segundo})
                 const j = crearEvento (rule, scheduleObject.id, callback)
             } catch (error) {
-                console.log(error.message)
+              throw crearErrorDelServidor(error.message);
             }
         },
 
@@ -64,15 +69,16 @@ const shell = require('shelljs') //acceder a la consola desde el programa
                                         second: scheduleObject.segundo})
                 const j = crearEvento (rule, scheduleObject.id, callback)
             } catch (error) {
-                console.log(error.message)
+              throw crearErrorDelServidor(error.message);
             }
         },
         cancelarEvento: function (id) {
             const evento = buscarEvento(id)
             if (evento) {
             cancelEvent(evento)
-            console.log('Se cancelo el evento con el id: ' + id)
-        }
+            } else {
+              throw crearErrorDeUsuario("No existe ese evento.")
+            }
         }
     }
   }

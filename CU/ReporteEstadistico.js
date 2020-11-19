@@ -1,3 +1,5 @@
+const { crearErrorDeUsuario, crearErrorDelServidor } = require('../src/DaoErrores.js')
+
 function crearCu(generadorPdf, temporizador) {
 
     return {
@@ -16,7 +18,11 @@ function crearCu(generadorPdf, temporizador) {
                     await generadorPdf.guardarDoc('PdfCU4', './CU/assets', doc);
                 });
             } catch (error) {
-                throw new Error(error.message)
+                if (error.type === 'USER_ERROR'){
+                    throw crearErrorDeUsuario(error.message);
+                } else {
+                    throw crearErrorDelServidor(error.message);
+                }
             }
         }
     }

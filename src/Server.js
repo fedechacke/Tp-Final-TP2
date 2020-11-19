@@ -3,7 +3,6 @@ const fs = require('fs')
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const morgan = require('morgan');
-// const _ = require('lodash');
 const multer = require('multer');
 const { crearFactoryCu } = require('../Factories/Zeus/MegaFactoryCU.js');
 
@@ -31,7 +30,11 @@ async function crearServidor(puerto, db) {
                 res.status(204).send();
             }
             catch (error) {
-                console.log(error.message);
+                if (error.type === 'USER_ERROR'){
+                    res.status(400).send(error.message);
+                }else{
+                    res.status(500).send(error.message);
+                }
             }
         })
 
@@ -43,7 +46,11 @@ async function crearServidor(puerto, db) {
                 cu.getCu().invocar(form.direcciones, form.asunto, form.cuerpo, form.archivo.nombreArchivo, form.archivo.rutaArchivo, desempenos);
                 res.status(204).send(); 
             } catch (error) {
-                
+                if (error.type === 'USER_ERROR'){
+                    res.status(400).send(error.message);
+                }else{
+                    res.status(500).send(error.message);
+                }
             }
         })
 
@@ -55,7 +62,11 @@ async function crearServidor(puerto, db) {
                 cu.getCu().invocar(form.frecuencia, form.tempRules, form.asunto, form.cuerpo, form.direcciones, form.archivo.nombreArchivo, form.archivo.rutaArchivo, desempenos);
                 res.status(204).send();
             } catch (error) {
-                console.log(error.message)
+                if (error.type === 'USER_ERROR'){
+                    res.status(400).send(error.message);
+                }else{
+                    res.status(500).send(error.message);
+                }
             }
         })
 
@@ -67,30 +78,13 @@ async function crearServidor(puerto, db) {
                 cu.getCu().invocar(tempRules.frecuencia, tempRules.tempRules, campanas);
                 res.status(200).send();
             } catch (error) {
-                console.log(error.message)
+                if (error.type === 'USER_ERROR'){
+                    res.status(400).send(error.message);
+                }else{
+                    res.status(500).send(error.message);
+                }
             }
         })
-        /* app.get('/api/remiseria/autos', async (req, res) => {
-            let autos
-
-            if(req.query.patente){
-                autos = await db.getAutoByPatente(req.query.patente)
-            }else{
-                autos = await db.getAllAutos()
-            }
-            res.json(autos)
-        })
-
-        app.get('/api/remiseria/choferes', async (req, res) => {
-            let choferes
-
-            if(req.query.dni){
-                choferes = await db.getChoferByDni(req.query.patente)
-            }else{
-                choferes = await db.getAllChoferes()
-            }
-            res.json(choferes)
-        }) */
 
         app.get('/remiseria/reportes', async (req, res) => {
             const data =fs.readFileSync(`./Demo.pdf`);
@@ -112,38 +106,14 @@ async function crearServidor(puerto, db) {
                 console.log('HIZO EL UPLOAD')
                 res.send(archivo);
             } catch (error) {
-                throw error.message
-            }
-
-            });
-        /* app.post('/api/remiseria/autos', async (req, res) => {
-            const auto = req.body
-            
-            try {
-                if (auto.patente){
-                    await db.addAuto(auto)
-                    res.json(auto)
-                } else {
-                    const err = new Error('El auto no tiene patente')
-                    res.status(400).json({ message: err.message })
+                if (error.type === 'USER_ERROR'){
+                    res.status(400).send(error.message);
+                }else{
+                    res.status(500).send(error.message);
                 }
-            } catch (error) {
-                res.status(400).json({ message: error.message })
             }
-                
-        }) */
-        /* app.post('/api/estudiantes', async (req, res) => {
-            const estuCreado = req.body
-            estuCreado.id = nextId++
+            });
 
-            try {
-                await db.addUnique(estuCreado, 'dni')
-                res.json(estuCreado)
-            } catch (error) {
-                res.status(400).json({ message: error.message })
-            }
-        })
-        */
         const server = app.listen(puerto)
             .on('listening', () => resolve(server))
             .on('error', () => reject(new Error('address in use')))

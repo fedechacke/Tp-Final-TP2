@@ -1,3 +1,5 @@
+const { crearErrorDeUsuario, crearErrorDelServidor } = require('../../src/DaoErrores.js')
+
 fonts = {
 
     Courier: {
@@ -31,8 +33,7 @@ const fs = require('fs');
 
 
 function crearModuloPdf() {
-    let pdfDoc;
-
+    
     const docDefinition = {
         info: {
             title: '',
@@ -50,10 +51,6 @@ function crearModuloPdf() {
         pageSize:'',
         pageOrientation: ''
     };
-
-    const options = {
-          // ...
-        };
 
         function imprimirPDF(archivo) {
             return printer.createPdfKitDocument(archivo);
@@ -111,6 +108,9 @@ function crearModuloPdf() {
          */
         crearTemplate: function(estilo) {
             
+            if (!estilo){
+                throw crearErrorDeUsuario("Ingrese un estilo")
+            }
             const template = docDefinition;
             
             switch (estilo) {
@@ -134,7 +134,7 @@ function crearModuloPdf() {
                     template.info.producer = 'También mi módulo de PDF';
                     break;
                 default:
-                    break;
+                    throw crearErrorDeUsuario("Ingrese un estilo valido");
             }
 
 
@@ -148,10 +148,15 @@ function crearModuloPdf() {
          * @param {Object[]} datos Datos a representar en la tabla
          */
         crearContent: function (template, columnas, datos) {
-            const content = template;
-            content.content = [
-                table(datos, columnas)
-            ]
+            
+            if (template && columnas && datos){
+                const content = template;
+                content.content = [
+                    table(datos, columnas)
+                ]                
+            } else {
+                throw crearErrorDeUsuario("Verifique columnas y datos")
+            }
             return content;
         },
 
@@ -162,15 +167,28 @@ function crearModuloPdf() {
         *@param {string} content: The content of the file, you must create this whith crearContent()
         */ 
         crearDoc: function (title, author, subject, content){
-            
+            if (!content){
+                throw crearErrorDeUsuario("Ingrese su contenido")
+            }
             content.info.title = title;
             content.info.author = author;
             content.info.subject = subject;
-            const pdfDoc = imprimirPDF(docDefinition, content);
-            return pdfDoc;
+            try {
+                const pdfDoc = imprimirPDF(docDefinition, content);
+                return pdfDoc;
+            } catch (error) {
+                throw crearErrorDelServidor(error.message);
+            }
         }, 
         guardarDoc: async function(fileName, path, doc){
-            await saveDoc(path, fileName, doc);
+            if (!fileName || !path || !doc){
+                throw crearErrorDeUsuario("Ingrese los datos de su archivo");
+            }
+            try {
+                await saveDoc(path, fileName, doc);
+            } catch (error) {
+                throw crearErrorDelServidor(error.message);
+            }
         } 
     }
 }

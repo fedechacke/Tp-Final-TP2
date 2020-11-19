@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const { crearErrorDelServidor, crearErrorDeUsuario } = require ('../../src/DaoErrores.js')
 
 function crearModuloMailing(mailService, username, password) {
     
@@ -17,24 +18,28 @@ function crearModuloMailing(mailService, username, password) {
             }
         })
     } else {
-        throw new Error('Usuario invalido');
+        throw crearErrorDeUsuario("Usuario invalido");
     }
 
     createMailData = function (to, subject, mailBody, fileName, filePath) {
-        let mailData = {
-            from: this.username,
-            to: to,
-            subject: subject,
-            text: mailBody
-        }
-
-        if (filePath != undefined && fileName != undefined){
-            let ext = filePath.substr(filePath.lastIndexOf('.'));
-            mailData.attachments = [{
-                filename: fileName + ext,
-                path: filePath,
-                contentType: `application/${ext}`
-            }]
+        if (to){
+            let mailData = {
+                from: this.username,
+                to: to,
+                subject: subject,
+                text: mailBody
+            }
+    
+            if (filePath != undefined && fileName != undefined){
+                let ext = filePath.substr(filePath.lastIndexOf('.'));
+                mailData.attachments = [{
+                    filename: fileName + ext,
+                    path: filePath,
+                    contentType: `application/${ext}`
+                }]
+            }
+        } else {
+            throw crearErrorDeUsuario("Ingrese una direccion");
         }
         return mailData; 
     }
@@ -48,26 +53,29 @@ function crearModuloMailing(mailService, username, password) {
         *@param {string?} filePath: path to the atttached document
         */ 
         enviarMail: async function (to, subject, mailBody, fileName, filePath) {
-            
-            const mailData = createMailData(to, subject, mailBody, fileName, filePath);
-            
-            await transporter.sendMail(mailData, (err, info) => {
-                if (err){
-                    throw new Error(`Error: ${err.message}`);
-                    //console.log(`Error: ${err.message}`);
-                } else {
-                    if (info.accepted){
-                        //console.log(`Mail enviado con exito a: ${info.accepted}`)
+            try {
+                const mailData = createMailData(to, subject, mailBody, fileName, filePath);
+                
+                await transporter.sendMail(mailData, (err, info) => {
+                    if (err){
+                        throw new Error(`Error: ${err.message}`);
+                        //console.log(`Error: ${err.message}`);
+                    } else {
+                        if (info.accepted){
+                            //console.log(`Mail enviado con exito a: ${info.accepted}`)
+                        }
+                        if (info.rejected){
+                            //enviar mail al emisor
+                            //console.log(`Mail rechazados: ${info.rejected}`)
+                        }
+                        if (info.pending){
+                            //console.log(`Mail pendientes: ${info.pending}`)
+                        }
                     }
-                    if (info.rejected){
-                        //enviar mail al emisor
-                        //console.log(`Mail rechazados: ${info.rejected}`)
-                    }
-                    if (info.pending){
-                        //console.log(`Mail pendientes: ${info.pending}`)
-                    }
-                }
-            })
+                })
+            } catch (error) {
+                throw crearErrorDelServidor(error.message);
+            }
         }
     }
 }

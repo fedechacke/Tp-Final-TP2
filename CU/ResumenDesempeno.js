@@ -1,3 +1,5 @@
+const { crearErrorDeUsuario, crearErrorDelServidor } = require('../src/DaoErrores.js')
+
 function crearCu(moduloMail, generadorPdf) {
 
     return {
@@ -13,7 +15,11 @@ function crearCu(moduloMail, generadorPdf) {
                 
                 moduloMail.enviarMail(direcciones, asunto, cuerpo, nombreArchivo, rutaArchivo);
             } catch (error) {
-                throw new Error(error.message);
+                if (error.type === 'USER_ERROR'){
+                    throw crearErrorDeUsuario(error.message);
+                } else {
+                    throw crearErrorDelServidor(error.message);
+                }
             }
         }
     }

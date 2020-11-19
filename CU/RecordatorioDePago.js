@@ -1,3 +1,6 @@
+const { crearErrorDeUsuario, crearErrorDelServidor } = require('../src/DaoErrores.js')
+
+
 function crearCu(moduloMail, temporizador) {
 
     return {
@@ -11,7 +14,11 @@ function crearCu(moduloMail, temporizador) {
                 });
             }
             catch (error) {
-                throw new Error(error.message);
+                if (error.type === 'USER_ERROR'){
+                    throw crearErrorDeUsuario(error.message);
+                } else {
+                    throw crearErrorDelServidor(error.message);
+                }
             }
         }
     }

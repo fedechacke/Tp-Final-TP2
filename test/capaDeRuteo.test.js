@@ -39,7 +39,7 @@ async function resuDesemp(server) {
         mailData: {
             subject:'mail de prueba',
             mailBody:'mail de prueba',
-            to:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com']
+            to:['sabrina-martinez@hotmail.es', 'tomas.lozano92@gmail.com']
         },
         mailAttach: {
             fileName: 'UnPdf',
@@ -77,7 +77,7 @@ async function emailDesemp(server) {
         frecuencia:'mensual',
         mailData: {subject:'mail de prueba',
         mailBody:'mail de prueba',
-        to:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com']
+        to:['sabrina-martinez@hotmail.es', 'tomas.lozano92@gmail.com']
         },
         mailAttach: {
             fileName: 'unPdf',

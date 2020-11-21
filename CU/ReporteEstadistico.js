@@ -1,5 +1,3 @@
-const { crearErrorDeUsuario, crearErrorDelServidor } = require('../src/DaoErrores.js')
-
 function crearCu(generadorPdf, temporizador) {
 
     return {

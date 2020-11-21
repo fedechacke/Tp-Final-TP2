@@ -3,8 +3,8 @@ const { crearCliente } = require('../src/ClienteRest.js')
 const { crearDao } = require('../src/DaoFactory')
 
 const diaDelMes = 21;
-const hora = 02;
-const minuto = 40;
+const hora = 16;
+const minuto = 21;
 const segundo = 00;
 
 
@@ -26,7 +26,7 @@ async function recoPago(server) {
         mailData: {
             subject:'mail de prueba',
             mailBody:'mail de prueba',
-            to:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com']
+            to:['sabrina-martinez@hotmail.es', 'tomas.lozano92@gmail.com']
         }
     });
 
@@ -84,7 +84,7 @@ async function emailDesemp(server) {
             filePath: './CU/assets/PdfCU3.pdf'
         }
     });
-}
+} 
 
 async function main() {
     const db = crearDao('db');

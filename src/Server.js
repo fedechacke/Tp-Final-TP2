@@ -26,7 +26,7 @@ async function crearServidor(puerto, db) {
             const form = req.body;
             const cu = crearFactoryCu('1');
             try {
-                cu.getCu().invocar(form.frecuencia, form.tempRules, form.asunto, form.cuerpo, form.direcciones);
+                cu.getCu().invocar(form.frecuencia, form.tempRules, form.mailData);
                 res.status(204).send();
             }
             catch (error) {
@@ -43,7 +43,7 @@ async function crearServidor(puerto, db) {
             const cu = crearFactoryCu('2');
             const desempenos = await db.getDesempenos();
             try {
-                cu.getCu().invocar(form.direcciones, form.asunto, form.cuerpo, form.archivo.nombreArchivo, form.archivo.rutaArchivo, desempenos);
+                cu.getCu().invocar(form.mailData, form.mailAttach, desempenos);
                 res.status(204).send(); 
             } catch (error) {
                 if (error.type === 'USER_ERROR'){
@@ -59,7 +59,7 @@ async function crearServidor(puerto, db) {
             const cu = crearFactoryCu('3');
             const desempenos = await db.getDesempenos();
             try {
-                cu.getCu().invocar(form.frecuencia, form.tempRules, form.asunto, form.cuerpo, form.direcciones, form.archivo.nombreArchivo, form.archivo.rutaArchivo, desempenos);
+                cu.getCu().invocar(form.frecuencia, form.tempRules, form.mailData, form.mailAttach, desempenos);
                 res.status(204).send();
             } catch (error) {
                 if (error.type === 'USER_ERROR'){

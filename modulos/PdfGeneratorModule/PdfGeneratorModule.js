@@ -148,15 +148,18 @@ function crearModuloPdf() {
          * @param {Object[]} datos Datos a representar en la tabla
          */
         crearContent: function (template, columnas, datos) {
-            
-            if (template && columnas && datos){
+            const content = template;
+                content.content = [
+                    table(datos, columnas)
+                ]                
+            /*if (template && columnas && datos){
                 const content = template;
                 content.content = [
                     table(datos, columnas)
                 ]                
             } else {
                 throw crearErrorDeUsuario("Verifique columnas y datos")
-            }
+            }*/
             return content;
         },
 

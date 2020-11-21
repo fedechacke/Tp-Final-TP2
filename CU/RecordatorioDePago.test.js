@@ -9,13 +9,18 @@ const tempRules = {
     segundo: 00,
     id: 'id'
 };
+const mailData = {
+    to: direcciones,
+    subject: 'Aviso de Pagos',
+    mailBody: 'No olvidarme de pagar a los empleados'
+}
 
 const frecuencia = 'mensual';
 
 function main () {
 
     const cu = factoryRecPago.getCu();
-    cu.invocar(frecuencia, tempRules, 'Aviso de Pagos', 'Pagarle a los empleados', direcciones);
+    cu.invocar(frecuencia, tempRules, mailData);
 
 };
 

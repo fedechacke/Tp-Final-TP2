@@ -21,26 +21,28 @@ function crearModuloMailing(mailService, username, password) {
         throw crearErrorDeUsuario("Usuario invalido");
     }
 
-    createMailData = function (to, subject, mailBody, fileName, filePath) {
-        if (to){
+    createMailData = function (mailInfo, mailAttach) {
+        if (mailInfo.to !== null){
+            console.log('to: '+mailInfo.to)
             let mailData = {
                 from: this.username,
-                to: to,
-                subject: subject,
-                text: mailBody
+                to: mailInfo.to,
+                subject: mailInfo.subject,
+                text: mailInfo.mailBody
             }
     
-            if (filePath != undefined && fileName != undefined){
-                let ext = filePath.substr(filePath.lastIndexOf('.'));
+            if (mailAttach != undefined){
+                let ext = mailAttach.filePath.substr(mailAttach.filePath.lastIndexOf('.'));
                 mailData.attachments = [{
-                    filename: fileName + ext,
-                    path: filePath,
+                    filename: mailAttach.fileName + ext,
+                    path: mailAttach.filePath,
                     contentType: `application/${ext}`
                 }]
             }
         } else {
             throw crearErrorDeUsuario("Ingrese una direccion");
         }
+        console.log('mailData: '+mailData)
         return mailData; 
     }
     
@@ -52,10 +54,14 @@ function crearModuloMailing(mailService, username, password) {
         *@param {string?} fileName: name of the file
         *@param {string?} filePath: path to the atttached document
         */ 
-        enviarMail: async function (to, subject, mailBody, fileName, filePath) {
+        enviarMail: async function (mailInfo, mailAttach) {
+            Object.keys(mailInfo).map(e => (
+                console.log(mailInfo[e], e)
+            ))
+            console.log('mailAttach: '+mailAttach)
             try {
-                const mailData = createMailData(to, subject, mailBody, fileName, filePath);
-                
+                const mailData = createMailData(mailInfo, mailAttach);
+                console.log('mailData es: '+mailData)
                 await transporter.sendMail(mailData, (err, info) => {
                     if (err){
                         throw new Error(`Error: ${err.message}`);

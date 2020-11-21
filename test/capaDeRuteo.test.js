@@ -2,9 +2,9 @@ const { crearServidor } = require('../src/Server.js')
 const { crearCliente } = require('../src/ClienteRest.js')
 const { crearDao } = require('../src/DaoFactory')
 
-const diaDelMes = 16;
-const hora = 20;
-const minuto = 34;
+const diaDelMes = 21;
+const hora = 02;
+const minuto = 40;
 const segundo = 00;
 
 
@@ -23,9 +23,11 @@ async function recoPago(server) {
     await cliente.addRecordatorioDePago({
         tempRules: tempRulesRecoPago,
         frecuencia:'mensual',
-        asunto:'mail de prueba',
-        cuerpo:'mail de prueba',
-        direcciones:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com']
+        mailData: {
+            subject:'mail de prueba',
+            mailBody:'mail de prueba',
+            to:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com']
+        }
     });
 
 }
@@ -34,14 +36,16 @@ async function resuDesemp(server) {
     const cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/resdesemp')
 
     await cliente.sendNewResumenDesempeno({
-        asunto:'mail de prueba',
-        cuerpo:'mail de prueba',
-        direcciones:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com'],
-        archivo: {
-            nombreArchivo: 'UnPdf',
-            rutaArchivo: './CU/assets/PdfCU2.pdf'
-        }
-    });
+        mailData: {
+            subject:'mail de prueba',
+            mailBody:'mail de prueba',
+            to:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com']
+        },
+        mailAttach: {
+            fileName: 'UnPdf',
+            filePath: './CU/assets/PdfCU2.pdf'
+            }
+        });
 }
 async function repoStats(server) {
     const cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/repostats')
@@ -68,16 +72,16 @@ async function emailDesemp(server) {
         segundo: segundo,
         id: 'id'
     }
-
     await cliente.addNewTimedDesempenoEmail({
         tempRules: tempRulesDesempMail,
         frecuencia:'mensual',
-        asunto:'mail de prueba',
-        cuerpo:'mail de prueba',
-        direcciones:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com'],
-        archivo: {
-            nombreArchivo: 'unPdf',
-            rutaArchivo: './CU/assets/PdfCU3.pdf'
+        mailData: {subject:'mail de prueba',
+        mailBody:'mail de prueba',
+        to:['sabrina-martinez@hotmail.es, tomas.lozano92@gmail.com']
+        },
+        mailAttach: {
+            fileName: 'unPdf',
+            filePath: './CU/assets/PdfCU3.pdf'
         }
     });
 }

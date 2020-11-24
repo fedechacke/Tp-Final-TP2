@@ -89,19 +89,7 @@ function crearModuloPdf() {
         }
 
     return {
-        /** 
-        *@param {string} font: the font used on the document, can be Courier, Helvetica, Times, Symbol or ZapfDingbats
-        *@param {number} fontSize: The size of the font
-        *@param {boolean} isBold: wether to bolden the font
-        *@param {string} pageSize: The size of the page, can be '4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10',
-                                    'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10',
-                                    'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10',
-                                    'RA0', 'RA1', 'RA2', 'RA3', 'RA4',
-                                    'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4',
-                                    'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'
-        *@param {string} pageOrientation: The orientation of the page. Can be landscape or portrait
-        */ 
-
+        
         /**
          * 
          * @param {string} estilo: El estilo deseado para el documento. Puede ser Ejecutivo o Casual.
@@ -148,18 +136,15 @@ function crearModuloPdf() {
          * @param {Object[]} datos Datos a representar en la tabla
          */
         crearContent: function (template, columnas, datos) {
+            
             const content = template;
-                content.content = [
-                    table(datos, columnas)
-                ]                
-            /*if (template && columnas && datos){
-                const content = template;
+            if (template && columnas && datos){
                 content.content = [
                     table(datos, columnas)
                 ]                
             } else {
                 throw crearErrorDeUsuario("Verifique columnas y datos")
-            }*/
+            }
             return content;
         },
 

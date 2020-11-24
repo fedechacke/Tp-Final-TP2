@@ -2,10 +2,10 @@ const { crearServidor } = require('../src/Server.js')
 const { crearCliente } = require('../src/ClienteRest.js')
 const { crearDao } = require('../src/DaoFactory')
 
-const diaDelMes = 21;
-const hora = 16;
-const minuto = 21;
-const segundo = 00;
+const diaDelMes = 24;
+const hora = 19;
+const minuto = 52;
+const segundo = 45;
 
 
 
@@ -21,8 +21,10 @@ async function recoPago(server) {
     }
 
     await cliente.addRecordatorioDePago({
-        tempRules: tempRulesRecoPago,
-        frecuencia:'mensual',
+        tempData: {
+            frecuencia:'mensual',
+            tempRules: tempRulesRecoPago
+        },
         mailData: {
             subject:'mail de prueba',
             mailBody:'mail de prueba',
@@ -40,12 +42,8 @@ async function resuDesemp(server) {
             subject:'mail de prueba',
             mailBody:'mail de prueba',
             to:['sabrina-martinez@hotmail.es', 'tomas.lozano92@gmail.com']
-        },
-        mailAttach: {
-            fileName: 'UnPdf',
-            filePath: './CU/assets/PdfCU2.pdf'
-            }
-        });
+        }
+    });
 }
 async function repoStats(server) {
     const cliente = crearCliente('http://localhost', server.address().port, '/api/remiseria/repostats')
@@ -58,8 +56,10 @@ async function repoStats(server) {
     }
 
     await cliente.addNewTimedReporteEstadistico({
-        tempRules: tempRulesRepoStats,
-        frecuencia:'diario'
+        tempData: {
+            tempRules: tempRulesRepoStats,
+            frecuencia:'diario'
+        }
     });
 }
 async function emailDesemp(server) {
@@ -72,29 +72,29 @@ async function emailDesemp(server) {
         segundo: segundo,
         id: 'id'
     }
+
     await cliente.addNewTimedDesempenoEmail({
-        tempRules: tempRulesDesempMail,
-        frecuencia:'mensual',
-        mailData: {subject:'mail de prueba',
-        mailBody:'mail de prueba',
-        to:['sabrina-martinez@hotmail.es', 'tomas.lozano92@gmail.com']
+        tempData: {
+            tempRules: tempRulesDesempMail,
+            frecuencia:'mensual'
         },
-        mailAttach: {
-            fileName: 'unPdf',
-            filePath: './CU/assets/PdfCU3.pdf'
+        mailData:{
+            subject:'mail de desempeños',
+            mailBody:'mail de prueba',
+            to:['sabrina-martinez@hotmail.es', 'tomas.lozano92@gmail.com']
         }
     });
-} 
+}
 
 async function main() {
     const db = crearDao('db');
-    const server = await crearServidor(0, db)
     await db.connect();
+    const server = await crearServidor(0, db)
     await recoPago(server);
     await resuDesemp(server);
     await repoStats(server);
     await emailDesemp(server);
-    await db.close();
+    // await db.close();
 }
 
 main();

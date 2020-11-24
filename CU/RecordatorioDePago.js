@@ -1,13 +1,12 @@
+
 function crearCu(moduloMail, temporizador) {
 
     return {
-        invocar: function (frecuencia, tempRules, mailData) {
-
-            const programarEvento = temporizador(frecuencia);
-
-            programarEvento(tempRules, function() {
-                moduloMail.enviarMail(mailData)
-            });
+        invocar: function (tempData, mailData) {
+                const programarEvento = temporizador(tempData.frecuencia);
+                programarEvento(tempData.tempRules, function() {
+                    moduloMail.enviarMail(mailData)
+                });
             
         }
     }

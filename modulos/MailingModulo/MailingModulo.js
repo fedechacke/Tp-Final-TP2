@@ -23,13 +23,13 @@ function crearModuloMailing(mailService, username, password) {
 
     createMailData = function (mailInfo, mailAttach) {
         let mailData
-        if (mailInfo.to !== null){
-            mailData = {
+            if (mailInfo.to !== null) {
+                mailData = {
                 from: this.username,
                 to: mailInfo.to,
                 subject: mailInfo.subject,
                 text: mailInfo.mailBody
-            }
+                }
     
             if (mailAttach != undefined){
                 let ext = mailAttach.filePath.substr(mailAttach.filePath.lastIndexOf('.'));
@@ -38,8 +38,8 @@ function crearModuloMailing(mailService, username, password) {
                     path: mailAttach.filePath,
                     contentType: `application/${ext}`
                 }]
-            } 
-        } else {
+            }
+            }  else {
             throw crearErrorDeUsuario("Ingrese una direccion");
         }
         return mailData; 
@@ -56,9 +56,11 @@ function crearModuloMailing(mailService, username, password) {
         enviarMail: async function (mailInfo, mailAttach) {
             try {
                 const mailData = createMailData(mailInfo, mailAttach);
+                
                 await transporter.sendMail(mailData, (err, info) => {
                     if (err){
                         throw new Error(`Error: ${err.message}`);
+                        //console.log(`Error: ${err.message}`);
                     } else {
                         if (info.accepted){
                             //console.log(`Mail enviado con exito a: ${info.accepted}`)
